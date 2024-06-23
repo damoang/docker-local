@@ -1,0 +1,13 @@
+# 컴포즈 후 생성되는 mysql_data 제외
+mysql_data/
+dmg-gnu/
+# MacOS General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
