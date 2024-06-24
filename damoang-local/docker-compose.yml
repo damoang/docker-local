@@ -4,7 +4,6 @@ services:
         platform: linux/amd64
         image: mysql:5.7
         container_name: da_mysql
-        restart: always
         environment:
             MYSQL_DATABASE: gnuboard
             MYSQL_USER: user
@@ -44,7 +43,6 @@ services:
         platform: linux/amd64
         image: phpmyadmin/phpmyadmin
         container_name: da_phpmyadmin
-        restart: always
         environment:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: root123
