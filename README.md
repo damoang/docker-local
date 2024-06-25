@@ -7,7 +7,13 @@
 * MySQL과 `gnuboad` db (데이터는 없음) 
 * phpMyAdmin 데이터베이스 관리도구 웹앱
 
-## ◽ Docker 컨테이너 컴포즈
+#### 개발환경 다운로드
+php 개발환경을 구성할 뿐인 본 레포지토리의 도커파일등에대해 직접 기여할 게 아니라면(개발환경을 바꿀게 아니라면) 본 레포지토리는 클론하지말고 단순히 <strong>다운로드</strong> 받아 사용하도록 하고, 아래에 안내대로 `dmg-gnu` 레포지토리만 클론하여 사용하십시오. 
+> [!CAUTION] Nested Git Ropos
+>
+> 본 레포지토리를 '다운로드'가 아닌, 'Clone'하고 아래 설명대로 한다면 로컬폴더는 본 레포지토리 안에 dmg-gnu 레포지토리가 존재하는 nested repository(git 서브 모듈) 상태가 됩니다. 작업할 때 IDE 혹은 Code Editor는 둘 모두 인식할 것입니다. 이런 경우라면 레포를 잘 구분하여 작업(커밋)하시기 바랍니다.
+
+## ◽ Docker 컨테이너 컴포즈로 시작하기
 
 본 레포지토리를 다운로드 받은 폴더 안에 `damoang-local` 폴더가 있습니다.  CLI(터미널,cmd)에서 이 폴더로 이동해서 `start.sh` 쉘스크립트 파일을 실행하거나, 아래의 `docker-compose` 명령어를 직접 실행합니다.   
 
@@ -77,8 +83,10 @@ E-mail : <사용자 입력>
 ### `data` 폴더 백업 후 그누보드 코어 기본 파일 삭제
 `data` 폴더를 별도로 백업해두고 `dmg-gnu`폴더 채 삭제합니다.
 
-## ◽ 다모앙 그누보드 설치 및 `data` 폴더 포함
-1. 다모앙 그누보드 `dmg-gnu` [레포지토리]( https://github.com/damoang/dmg-gnu)(혹은 fork버전)을 클론하면 나오는 `dmg-gnu`폴더를 `docker-local` 하위에 넣어줍니다.
+## ◽ 다모앙 그누보드(dmg-gnu) 설치 및 `data` 폴더 포함
+1. 다모앙 그누보드 `dmg-gnu` [레포지토리]( https://github.com/damoang/dmg-gnu)를 자신의 GitHub 계정으로 fork하고 해당 fork버전을 로컬컴퓨터에 클론하면 나오는 `dmg-gnu`폴더를 `docker-local` 하위에 넣어줍니다.
+   -![](readme-resources/dmg-gnu-dir-inside-local.png)
+
 2. 백업해두었던 `data` 폴더 또한  `dmg-gnu` 폴더 안에 다시 추가합니다.
 
 > [!CAUTION]
@@ -135,6 +143,19 @@ E-mail : <사용자 입력>
       - 모바일스킨 디렉토리 : **basic**
       - (광고주 모음페이지인 광고앙 페이지는 ID가 `advertiser`인 페이지를 만들면 됩니다.)
 
+### 글쓰기 에디터 설정
+admin 패널에서 다모앙에디터(DHTML)를 사용하도록 설정하고 글쓰기 이미지 갯수/용량을 변경하세요.
+
+- [관리자페이지 - 게시판관리 - (게시판)수정]
+  - ![](readme-resources/editor-setting-1.png)
+  - (게시판 기능설정): DHTML 사용
+    - ![](readme-resources/editor-setting-2.png)  
+  - (게시판 기능설정): 용량
+    - ![](readme-resources/editor-setting-3.png)
+
+### 게시판이 아닌 페이지 설정
+그누보드는 게시판이나 게시글이 아닌 별도의 '내용(content)'이라는 페이지를 만들 수 있습니다. admin 패널에서 '내용 관리' 에서 페이지를 추가할 수 있습니다. 여기에 추가하는 페이지들은 `/content/` 하위에 나타나는 페이지들(예: 약관,광고앙 페이지)이며, dmg-gnu 코드에서 `theme/damoang/page/` 하위에서 각각의 php 파일로 HTML 출력을 덮어쓸 수 있습니다. 예를들어 '광고앙'페이지를 추가하려면 '내용관리'에서 id가  `advertiser`인 페이지를 추가하는 것만으로도 `theme/damoang/page/`하위에  `advertiser.php` 파일이 merge 되어있으므로 `http://localhost/content/advertiser`에서 바로 볼 수 있습니다.
+
 ## ◽ PHP Composer로 써드파티 PHP 라이브러리 설치
 PHP 컨테이너 환경에는 Composer가 설치되어있으며 관리되는 써드파티 라이브러리는 다모앙 그누보드 레파지토리(`dmg-gnu`폴더)의 composer.json/lock 파일에 명시되어있습니다. 이곳에서 composer 명령어를 입력하여 써드파티 라이브러리가 설치됩니다.
 
@@ -154,23 +175,44 @@ php 컨테이너에 정의된 Web document root(`/var/www/htm` = `dmg-gnu`)로 �
 다음 명령어로 PHP 컨테이너 환경에서 빠져나옵니다:
 * $`exit`
 
+(로컬환경을 꾸민지 오래되었을 때) `dmg-gnu` 최신판을 pull 했을때 실제서버에 새롭게 추가되거나 업데이트된 써드파티 php 라이브러리에 의존성이 있을 수 있습니다(`composer.json `과 `composer.lock` 파일이 갱신되었을때) 그땐 실제 다모앙서버와 환경을 맞추기위해 위 과정처럼 다시한번 vendor를 재설치하거나 composer업데이트 하시기 바랍니다.
+~~~
+$ composer install
+$ composer update
+~~~
+
+## ◽ 백업 및 복원
+처음부터 다시 환경을 꾸밀일이 있을 때 로컬 사이트의 admin 설정, 추가한 users, 테그트용으로 작성한 글등의 DB 설정파일과 이미지나 위젯데이터들을 백업해두면 위 과정을 다시 거치지 않고 손쉽게 복원할 수 있습니다.
+* `/docker-local/damoang-local/` 하위의 `mysql_data` 폴더
+* `/docker-local/dmg-gnu` 하위의 `vendor` 폴더
+* `/docker-local/dmg-gnu` 하위의 `data` 폴더
+* >참고: 위 파일들은 git으로 관리되 않습니다. 
+
+본 레포를 다시 다운로드 받은 후 위 백업파일들을 제 자리에 넣고 <strong>'Docker 컨테이너 컴포즈로 시작하기'</strong>로 도커를 시작하기만 하면 됩니다. 안된다면 백업해둔 `mysql_data` 폴더를 다시 대치(replace)한뒤 도커를 재시작해보세요. 
+* $`docker-compose restart`
+
+
 ## ◽ 문제해결
 ### 만약 테마 관련 설정이 저장되지 않는다면
 - theme 폴더 및 하위 폴더들을 쓰기 가능하게 권한 수정
 
 ### 로그인이 풀렸을 때
+위에 설명한대로 '스킨 설정'의 '회원 가입' 스킨을 실제 다모앙과 다르게 했을 것이므로 아래처럼 로그인할 수 있습니다:
 - `/bbs/login.php` 또는 `/adm` 으로 접속 시도하면 로그인 후 이용해 달라는 안내 후  ID/PW 입력 로그인 화면이 나옵니다.
 - ID/PW 입력 로그인 화면을 찾을 수 없을 때는 `http://localhost:8080` 의 phpMyAdmin으로 접속하여 `gnuboard` db -> `g5_config` 테이블의 `cf_member_skin` 과 `cf_mobile_member_skin` 칼럼의 값을 `basic` 으로 설정 후 재시도
 
-### 환경 컨테이너를 직접 변경하려면
+### 환경 도커 컨테이너를 직접 변경하려면
 `damoang-local` 폴더에서 적절한 명령어를 사용하여 접속할 수 있습니다.
 * ex) MySQL 컨테이너 접속
     *  `docker exec -it da_mysql mysql -uroot -p`
     * PW: `root123`
 
 ### 코드작성
-소스를 변경하면 로컬사이트에 반영됩니다. 안된다면 docker를 재시작 합니다:
+`dmg-gnu` 소스를 변경하면 로컬사이트에 반영됩니다. 안된다면 docker를 재시작 합니다:
 $ `docker-compose restart`
+
+## ◽ dmg-gnu 코드 기여
+`dmg-gnu` 레포를 fork한 버전은 github에서 종종 `damoang/dmg-gnu` 버전으로 sync 한 뒤 로컬로 pull 해야합니다. 로컬에서 코드를 오래 묵힌 경우 그 사이 다른 사람이 변경한 파일이 충돌할 수 있으므로 최신판으로 pull 한뒤 되도록이면 충돌을 해결해고 PR 하도록 해주세요.
 
 
 ---
