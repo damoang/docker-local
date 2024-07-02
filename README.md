@@ -157,14 +157,13 @@ admin 패널에서 다모앙에디터(DHTML)를 사용하도록 설정하고 글
 그누보드는 게시판이나 게시글이 아닌 별도의 '내용(content)'이라는 페이지를 만들 수 있습니다. admin 패널에서 '내용 관리' 에서 페이지를 추가할 수 있습니다. 여기에 추가하는 페이지들은 `/content/` 하위에 나타나는 페이지들(예: 약관,광고앙 페이지)이며, dmg-gnu 코드에서 `theme/damoang/page/` 하위에서 각각의 php 파일로 HTML 출력을 덮어쓸 수 있습니다. 예를들어 '광고앙'페이지를 추가하려면 '내용관리'에서 id가  `advertiser`인 페이지를 추가하는 것만으로도 `theme/damoang/page/`하위에  `advertiser.php` 파일이 merge 되어있으므로 `http://localhost/content/advertiser`에서 바로 볼 수 있습니다.
 
 ## ◽ PHP Composer로 써드파티 PHP 라이브러리 설치
-PHP 컨테이너 환경에는 Composer가 설치되어있으며 관리되는 써드파티 라이브러리는 다모앙 그누보드 레파지토리(`dmg-gnu`폴더)의 composer.json/lock 파일에 명시되어있습니다. 이곳에서 composer 명령어를 입력하여 써드파티 라이브러리가 설치됩니다.
-~~~
-$ composer install
-$ composer update
-~~~
 
 > [!CAUTION]
-> Composer가 관리하는 써드파티 라이브러리 모음인`vendor` 폴더는 git으로 관리됩니다. 로컬에서 Composer로 업데이트하거나 설치해서 `vendor` 내용을 바꾸면 PR시 함께 올라갑니다.
+> Composer가 관리하는 써드파티 라이브러리 모음인 `vendor` 폴더는 git으로 관리됩니다. 로컬에서 Composer로 업데이트하거나 설치해서 `vendor` 내용을 바꾸면 PR시 함께 올라갑니다.
+
+PHP 컨테이너 환경에는 Composer가 설치되어있으며 관리되는 써드파티 라이브러리는 다모앙 그누보드 레파지토리(`dmg-gnu`폴더)의 composer.json/lock 파일에 명시되어있습니다. 이곳에서 composer 명령어를 입력하여 써드파티 라이브러리가 설치됩니다.
+
+wiki 참고 : [Composer 패키지 업데이트 시 주의사항 ](https://github.com/damoang/dmg-gnu/wiki/Composer-패키지-업데이트-시-주의사항-%E2%80%90-vendor)
 
 ## ◽ 백업 및 복원
 처음부터 다시 환경을 꾸밀일이 있을 때 로컬 사이트의 admin 설정, 추가한 users, 테그트용으로 작성한 글등의 DB 설정파일과 이미지나 위젯데이터들을 백업해두면 위 과정을 다시 거치지 않고 손쉽게 복원할 수 있습니다.
